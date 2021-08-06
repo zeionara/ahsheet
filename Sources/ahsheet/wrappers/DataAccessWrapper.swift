@@ -7,7 +7,7 @@ extension Data: CustomStringConvertible {
     }
 }
 
-func putData(_ body: Data?, _ makePath: (String, String) -> String) throws -> Data? {
+public func putData(_ body: Data?, _ makePath: (String, String) -> String) throws -> Data? {
     if let api_key = ProcessInfo.processInfo.environment["AH_SHEET_WRITE_API_KEY"],
        let spreadsheet_id = ProcessInfo.processInfo.environment["AH_SHEET_ID"],
        let token = ProcessInfo.processInfo.environment["AH_SHEET_TOKEN"] {
@@ -40,7 +40,7 @@ func putData(_ body: Data?, _ makePath: (String, String) -> String) throws -> Da
     }
 }
 
-func getSheetData(_ range: String) throws -> SheetData {
+public func getSheetData(_ range: String) throws -> SheetData {
     return try JSONDecoder().decode(
         SheetData.self,
         from: getData { spreadsheet_id, api_key in
@@ -49,15 +49,15 @@ func getSheetData(_ range: String) throws -> SheetData {
     )
 }
 
-func getSheetData(_ range: String, sheet: String) throws -> SheetData {
+public func getSheetData(_ range: String, sheet: String) throws -> SheetData {
     try getSheetData("'\(sheet)'!\(range)")
 }
 
-func getSheetData(_ range: Range) throws -> SheetData {
+public func getSheetData(_ range: Range) throws -> SheetData {
     try getSheetData(range.debugDescription)
 }
 
-func setSheetData(_ data: SheetData) throws {
+public func setSheetData(_ data: SheetData) throws {
     try putData(
         try? JSONEncoder().encode(data)
     ) { spreadsheet_id, api_key in
