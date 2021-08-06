@@ -1,0 +1,24 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "preLaunchTask": "swift-build",
+            "name": "Run the excellent app",
+            "program": "${workspaceFolder}/.build/debug/ahsheet",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "sourceLanguages": [
+                "swift"
+            ],
+            "env": {
+                "AH_SHEET_ID": "foo",
+                "AH_SHEET_API_KEY": "bar"
+            }
+        }
+    ]
+}
