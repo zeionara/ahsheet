@@ -12,3 +12,7 @@ func getSheetData(_ range: String) throws -> SheetData {
 func getSheetData(_ range: String, sheet: String) throws -> SheetData {
     try getSheetData("'\(sheet)'!\(range)")
 }
+
+func getSheetData(_ range: Range) throws -> SheetData {
+    try getSheetData(range.debugDescription)
+}

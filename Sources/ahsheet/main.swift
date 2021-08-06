@@ -31,10 +31,25 @@ import Foundation
 //     print("Missing env variables")
 // }
 
+let range = try Range(
+    first: Address(
+        row: 0, column: 0, sheet: "05.08.2021"
+    ),
+    last: Address(
+        row: 10, column: 1, sheet: "05.08.2021"
+    )
+)
+print(range)
+
 print("Cells:")
 // print(try getSheetData("'05.08.2021'!A5:B6").values)
-print(try getSheetData("A5:B6", sheet: "05.08.2021").values)
-
+print(try getSheetData(range).values)
+// print(try getSheetData("A5:B6", sheet: "05.08.2021").values)
+// print(Address(row: 2, column: 2, sheet: "foo"))
+// print(try Address("'foo'!C3").rowIndex)
+// print(300.asRowLabel)
+// print("KO".asRowIndex)
+// print(range)
 
 //
 // Metadata access
