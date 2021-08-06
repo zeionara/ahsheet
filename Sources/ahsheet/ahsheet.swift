@@ -1,5 +1,13 @@
-import FoundationNetworking
-import Foundation
+public struct ahsheet {
+    public private(set) var text = "Hello, World!"
+
+    public init() {
+    }
+}
+
+
+// import FoundationNetworking
+// import Foundation
 
 // print("Hello, world!")
 
@@ -31,19 +39,19 @@ import Foundation
 //     print("Missing env variables")
 // }
 
-let range = try Range(
-    first: Address(
-        row: 0, column: 0, sheet: "test"
-    ),
-    last: Address(
-        row: 10, column: 1, sheet: "test"
-    )
-)
-print(range)
+// let range = try Range(
+//     first: Address(
+//         row: 0, column: 0, sheet: "test"
+//     ),
+//     last: Address(
+//         row: 10, column: 1, sheet: "test"
+//     )
+// )
+// print(range)
 
-print("Cells:")
+// print("Cells:")
 // print(try getSheetData("'05.08.2021'!A5:B6").values)
-print(try getSheetData(range).values)
+// print(try getSheetData(range).values)
 // print(try getSheetData("A5:B6", sheet: "05.08.2021").values)
 // print(Address(row: 2, column: 2, sheet: "foo"))
 // print(try Address("'foo'!C3").rowIndex)
@@ -51,19 +59,19 @@ print(try getSheetData(range).values)
 // print("KO".asRowIndex)
 // print(range)
 
-try setSheetData(
-    SheetData(
-        range: "'test'!A1",
-        values: [
-            [
-                "one", "two"
-            ],
-            [
-                "three", "four"
-            ]
-        ]
-    )
-)
+// try setSheetData(
+//     SheetData(
+//         range: "'test'!A1",
+//         values: [
+//             [
+//                 "one", "two"
+//             ],
+//             [
+//                 "three", "four"
+//             ]
+//         ]
+//     )
+// )
 
 //
 // Metadata access
