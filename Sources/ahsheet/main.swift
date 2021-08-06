@@ -33,10 +33,10 @@ import Foundation
 
 let range = try Range(
     first: Address(
-        row: 0, column: 0, sheet: "05.08.2021"
+        row: 0, column: 0, sheet: "test"
     ),
     last: Address(
-        row: 10, column: 1, sheet: "05.08.2021"
+        row: 10, column: 1, sheet: "test"
     )
 )
 print(range)
@@ -50,6 +50,20 @@ print(try getSheetData(range).values)
 // print(300.asRowLabel)
 // print("KO".asRowIndex)
 // print(range)
+
+try setSheetData(
+    SheetData(
+        range: "'test'!A1",
+        values: [
+            [
+                "one", "two"
+            ],
+            [
+                "three", "four"
+            ]
+        ]
+    )
+)
 
 //
 // Metadata access
