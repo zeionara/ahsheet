@@ -20,7 +20,8 @@
                 "AH_SHEET_API_KEY": "bar",
                 "AH_SHEET_WRITE_API_KEY": "baz",
                 "AH_SHEET_TOKEN": "qux",
-                "AH_SHEET_REFERER": "quux"
+                "AH_SHEET_REFERER": "quux",
+                "AH_SHEET_CREDS_PATH": "corge"
             }
         }
     ]
