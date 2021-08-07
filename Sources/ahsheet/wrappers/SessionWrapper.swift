@@ -7,6 +7,7 @@ public enum SessionWrapperInitializationException: Error {
 
 public enum HttpClientError: Error {
     case unauthorized(String)
+    case noSpreadsheetId(String)
 }
 
 let TOKEN_CACHE_PATH = "assets/token.json"

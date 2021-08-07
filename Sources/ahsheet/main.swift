@@ -184,11 +184,24 @@ import OAuth2
 // )
 // try browserTokenProvider.saveToken("token.json")
 
+let wrapper = try GoogleApiSessionWrapper()
 
-
-for sheet in try GoogleApiSessionWrapper().getSpreadsheetMeta().sheets {
+for sheet in try wrapper.getSpreadsheetMeta().sheets {
     print(sheet)
 }
+
+print(try wrapper.getSheetData("'05.08.2021'!A1:B2").values)
+
+try wrapper.setSheetData(
+    SheetData(
+        range: "test!A1",
+        values: [
+            [
+                "foo", "bar"
+            ]
+        ]
+    )
+)
 
 // try session.getPeople()
 

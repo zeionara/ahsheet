@@ -35,12 +35,14 @@ public func getSphreadsheetMeta() throws -> SpreadsheetMeta {
 
 public extension GoogleApiSessionWrapper {
     private func fetchSphreadsheetMeta() throws -> SpreadsheetMeta {
+        guard let spreadsheet_id = ProcessInfo.processInfo.environment["AH_SHEET_ID"] else {
+            throw HttpClientError.noSpreadsheetId("Target spreadsheet id is undefined (environment variable 'AH_SHEET_ID' is not set)")
+        }
+        
         let sem = DispatchSemaphore(value: 0)
         
         var responseData : Data?
         let parameters = ["fields": "sheets.properties.title,sheets.properties.sheetId"]
-
-        let spreadsheet_id = ProcessInfo.processInfo.environment["AH_SHEET_ID"]!
         
         try connection.performRequest(
             method:"GET",
