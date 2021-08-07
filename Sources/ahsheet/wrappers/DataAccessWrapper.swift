@@ -125,7 +125,7 @@ public extension GoogleApiSessionWrapper {
             parameters: parameters,
             body: try? JSONEncoder().encode(sheetData)
         ) { (data, response, error) in
-            print(String(decoding: data!, as: UTF8.self))
+            // print(String(decoding: data!, as: UTF8.self))
             responseData = data
             sem.signal()
         }
