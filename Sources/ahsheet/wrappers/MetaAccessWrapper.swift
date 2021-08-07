@@ -14,7 +14,7 @@ func getData(_ makePath: (String, String) -> String) throws -> Data? {
     }
 }
 
-public func getSphreadsheetMeta() throws -> SpreadsheetMeta {
+public func getSpreadsheetMeta() throws -> SpreadsheetMeta {
     // if let api_key = ProcessInfo.processInfo.environment["AH_SHEET_API_KEY"], let spreadsheet_id = ProcessInfo.processInfo.environment["AH_SHEET_ID"] {
     //     let spreadsheetInfo = try String(
     //         contentsOf: "https://content-sheets.googleapis.com/v4/spreadsheets/\(spreadsheet_id)?key=\(api_key)&fields=sheets.properties.title,sheets.properties.sheetId".asUrl
@@ -34,7 +34,7 @@ public func getSphreadsheetMeta() throws -> SpreadsheetMeta {
 }
 
 public extension GoogleApiSessionWrapper {
-    private func fetchSphreadsheetMeta() throws -> SpreadsheetMeta {
+    private func fetchSpreadsheetMeta() throws -> SpreadsheetMeta {
         guard let spreadsheet_id = ProcessInfo.processInfo.environment["AH_SHEET_ID"] else {
             throw HttpClientError.noSpreadsheetId("Target spreadsheet id is undefined (environment variable 'AH_SHEET_ID' is not set)")
         }
@@ -77,10 +77,10 @@ public extension GoogleApiSessionWrapper {
 
     public func getSpreadsheetMeta() throws -> SpreadsheetMeta {
         do {
-            return try fetchSphreadsheetMeta()
+            return try fetchSpreadsheetMeta()
         } catch HttpClientError.unauthorized {
             try refreshToken(connection.provider as! BrowserTokenProvider)
-            return try fetchSphreadsheetMeta()
+            return try fetchSpreadsheetMeta()
         }
     }
 }
