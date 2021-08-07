@@ -53,39 +53,39 @@ import OAuth2
 // let creds = try readCredentials(ProcessInfo.processInfo.environment["AH_SHEET_CREDS_PATH"]!)
 // print(creds.clientId)
 
-class GoogleSession {
-  var connection: Connection
+// class GoogleSession {
+//   var connection: Connection
   
-  init(tokenProvider: TokenProvider) {
-    connection = Connection(provider: tokenProvider)
-  }
+//   init(tokenProvider: TokenProvider) {
+//     connection = Connection(provider: tokenProvider)
+//   }
 
-  func getPeople() throws {
-    let sem = DispatchSemaphore(value: 0)
+//   func getPeople() throws {
+//     let sem = DispatchSemaphore(value: 0)
     
-    var responseData : Data?
-    let parameters = ["fields": "sheets.properties.title,sheets.properties.sheetId"]
+//     var responseData : Data?
+//     let parameters = ["fields": "sheets.properties.title,sheets.properties.sheetId"]
 
-    let spreadsheet_id = ProcessInfo.processInfo.environment["AH_SHEET_ID"]!
+//     let spreadsheet_id = ProcessInfo.processInfo.environment["AH_SHEET_ID"]!
     
-    print("foo")
-    try connection.performRequest(
-      method:"GET",
-      urlString:"https://content-sheets.googleapis.com/v4/spreadsheets/\(spreadsheet_id)",
-      parameters: parameters,
-      body:nil
-    ) {(data, response, error) in
-        responseData = data
-        sem.signal()
-    }
-    print("bar")
-    _ = sem.wait(timeout: DispatchTime.distantFuture)
-    print("baz")
-    if let data = responseData {
-      let response = String(data: data, encoding: .utf8)!
-      print(response)
-    }
-  }
+//     print("foo")
+//     try connection.performRequest(
+//       method:"GET",
+//       urlString:"https://content-sheets.googleapis.com/v4/spreadsheets/\(spreadsheet_id)",
+//       parameters: parameters,
+//       body:nil
+//     ) {(data, response, error) in
+//         responseData = data
+//         sem.signal()
+//     }
+//     print("bar")
+//     _ = sem.wait(timeout: DispatchTime.distantFuture)
+//     print("baz")
+//     if let data = responseData {
+//       let response = String(data: data, encoding: .utf8)!
+//       print(response)
+//     }
+//   }
 
 //   func getMe() throws {
 //     let sem = DispatchSemaphore(value: 0)
@@ -174,17 +174,7 @@ class GoogleSession {
 //       print(response)
 //     }
 //   }
-}
-
-
-guard let browserTokenProvider = BrowserTokenProvider(
-    credentials: ProcessInfo.processInfo.environment["AH_SHEET_CREDS_PATH"]!,
-    token: "token.json"
-) else {
-    print("Unable to create token provider.")
-    throw CredentialsReadingError.cannotReadCredentials("Cannot read credentials from given file")
-}
-let session = GoogleSession(tokenProvider: browserTokenProvider)
+// }
 
 // try browserTokenProvider.signIn(
 //     scopes: [
@@ -194,10 +184,16 @@ let session = GoogleSession(tokenProvider: browserTokenProvider)
 // )
 // try browserTokenProvider.saveToken("token.json")
 
-try session.getPeople()
 
-print("Fetched cells:")
-print(try getSheetData("'05.08.2021'!A5:B6").values)
+
+for sheet in try GoogleApiSessionWrapper().getSpreadsheetMeta().sheets {
+    print(sheet)
+}
+
+// try session.getPeople()
+
+// print("Fetched cells:")
+// print(try getSheetData("'05.08.2021'!A5:B6").values)
 // print(try getSheetData(range).values)
 // print(try getSheetData("A5:B6", sheet: "05.08.2021").values)
 // print(Address(row: 2, column: 2, sheet: "foo"))

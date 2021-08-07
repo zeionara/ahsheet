@@ -25,3 +25,8 @@ func readJSON(_ path: String) -> Data? {
 func readCredentials(_ path: String) throws -> StoredCredentials {
     try JSONDecoder().decode(StoredCredentials.self, from: readJSON(path)!)
 }
+
+func ensureParentDirectoriesExist(_ path: String) throws {
+    let parentDirectoryURL = URL(fileURLWithPath: path).deletingLastPathComponent()
+    try FileManager.default.createDirectory(atPath: parentDirectoryURL.path, withIntermediateDirectories: true, attributes: nil)
+}
