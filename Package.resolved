@@ -21,10 +21,10 @@
       },
       {
         "package": "Auth",
-        "repositoryURL": "https://github.com/googleapis/google-auth-library-swift",
+        "repositoryURL": "https://github.com/zeionara/google-auth-library-swift",
         "state": {
           "branch": "master",
-          "revision": "bd467b2c2873d1f80f42f28e1dfc269838fc559a",
+          "revision": "dd399a69d232c28df45431a4fd3bcd86f11d7d28",
           "version": null
         }
       },

@@ -6,20 +6,18 @@ import PackageDescription
 let package = Package(
     name: "ahsheet",
     products: [
-        .executable(
+        .library(
             name: "ahsheet",
             targets: ["ahsheet"]
         )
     ],
     dependencies: [
-        // .package(url: "https://github.com/OAuthSwift/OAuthSwift.git", .branch("master"))
-        // .package(url: "https://github.com/p2/OAuth2", .branch("master"))
-        .package(url: "https://github.com/googleapis/google-auth-library-swift", .branch("master"))
+        .package(url: "https://github.com/zeionara/google-auth-library-swift", .branch("master"))
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
-        .executableTarget(
+        .target(
             name: "ahsheet",
             dependencies: [
                 .product(name: "OAuth2", package: "google-auth-library-swift")
@@ -28,6 +26,6 @@ let package = Package(
         .testTarget(
             name: "ahsheetTests",
             dependencies: ["ahsheet"]
-        ),
+        )
     ]
 )

@@ -9,7 +9,7 @@ A minimalistic wrapper for google api services which implements some common inte
 In your `Package.swift` update the list of global dependencies which is written using the property `dependencies`. It must contain the following entry:
 
 ```swift
-.package(url: "https://github.com/zeionara/ahsheet.git", .branch("master"))
+.package(url: "https://github.com/zeionara/ahsheet.git", .branch("oauth"))
 ```
 
 In the same file include the dependency into the local list of dependencies corresponding to your app configuration (for instance, the path to this property may look like `targets.executableTarget.dependencies`). As a result of modification, this list have to include at least this entry:

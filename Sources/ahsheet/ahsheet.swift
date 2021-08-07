@@ -1,14 +1,14 @@
-// public struct ahsheet {
-//     public private(set) var text = "Hello, World!"
+public struct ahsheet {
+    public private(set) var text = "Hello, World!"
 
-//     public init() {
-//     }
-// }
+    public init() {
+    }
+}
 
 
 // import FoundationNetworking
-import Foundation
-import OAuth2
+// import Foundation
+// import OAuth2
 
 // print("Hello, world!")
 
@@ -184,11 +184,11 @@ import OAuth2
 // )
 // try browserTokenProvider.saveToken("token.json")
 
-let wrapper = try GoogleApiSessionWrapper()
+// let wrapper = try GoogleApiSessionWrapper()
 
-for sheet in try wrapper.getSpreadsheetMeta().sheets {
-    print(sheet)
-}
+// for sheet in try wrapper.getSpreadsheetMeta().sheets {
+//     print(sheet)
+// }
 
 // print(try wrapper.getSheetData("'05.08.2021'!A1:B2").values)
 
