@@ -21,17 +21,14 @@ public func putData(_ body: Data?, _ makePath: (String, String) -> String) throw
         let sem = DispatchSemaphore.init(value: 0)
         var httpResponse: Data?
 
-        print("Starting task...")
         URLSession.shared.dataTask(with: request) { data, response, error in
             defer { sem.signal() }
-            print("ok")
             guard let data = data else {
                 return
             }
             print(String(decoding: data, as: UTF8.self))
             httpResponse = data
         }.resume()
-        print("Started task")
         
         sem.wait()
         return httpResponse
