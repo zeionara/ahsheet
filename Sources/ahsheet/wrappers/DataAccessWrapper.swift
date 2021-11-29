@@ -29,7 +29,7 @@ public func putData(_ body: Data?, _ makePath: (String, String) -> String) throw
             print(String(decoding: data, as: UTF8.self))
             httpResponse = data
         }.resume()
-        
+
         sem.wait()
         return httpResponse
     } else {
@@ -71,10 +71,10 @@ public extension GoogleApiSessionWrapper {
         }
 
         let sem = DispatchSemaphore(value: 0)
-        
+
         var responseData : Data?
         let parameters = ["fields": "values,range"]
-        
+
         try connection.performRequest(
             method: "GET",
             urlString: "https://content-sheets.googleapis.com/v4/spreadsheets/\(spreadsheet_id)/values/\(range)",
@@ -85,9 +85,9 @@ public extension GoogleApiSessionWrapper {
             responseData = data
             sem.signal()
         }
-        
+
         _ = sem.wait(timeout: DispatchTime.distantFuture)
-        
+
         do {
             return try JSONDecoder().decode(
                 SheetData.self,
@@ -112,10 +112,10 @@ public extension GoogleApiSessionWrapper {
         }
 
         let sem = DispatchSemaphore(value: 0)
-        
+
         var responseData : Data?
         let parameters = ["valueInputOption": "USER_ENTERED"]
-        
+
         try connection.performRequest(
             method: "PUT",
             urlString: "https://content-sheets.googleapis.com/v4/spreadsheets/\(spreadsheet_id)/values/\(sheetData.range)",
@@ -126,9 +126,9 @@ public extension GoogleApiSessionWrapper {
             responseData = data
             sem.signal()
         }
-        
+
         _ = sem.wait(timeout: DispatchTime.distantFuture)
-        
+
         if let httpError = try? JSONDecoder().decode(
             HttpError.self,
             from: responseData!
@@ -137,6 +137,48 @@ public extension GoogleApiSessionWrapper {
                 throw HttpClientError.unauthorized("Incorrect authorization key or no authentication key at all")
             }
         }
+    }
+
+    func batchUpdate(_ requests: [[String: [String: [String: String]]]]) throws -> Data? {
+        guard let spreadsheet_id = ProcessInfo.processInfo.environment["AH_SHEET_ID"] else {
+            throw HttpClientError.noSpreadsheetId("Target spreadsheet id is undefined (environment variable 'AH_SHEET_ID' is not set)")
+        }
+
+        let sem = DispatchSemaphore(value: 0)
+
+        var responseData : Data?
+
+        try connection.performRequest(
+            method: "POST",
+            urlString: "https://content-sheets.googleapis.com/v4/spreadsheets/\(spreadsheet_id):batchUpdate?alt=json",
+            parameters: [:],
+            body: JSONEncoder().encode(["requests": requests])
+            ) { (data, response, error) in
+               // print(String(decoding: data!, as: UTF8.self))
+               responseData = data
+               sem.signal()
+          }
+
+          _ = sem.wait(timeout: DispatchTime.distantFuture)
+
+          return responseData
+
+          // do {
+          //     return try JSONDecoder().decode(
+          //         SheetData.self,
+          //         from: responseData!
+          //     )
+    // } catch {
+          //     let httpError = try JSONDecoder().decode(
+          //         HttpError.self,
+          //         from: responseData!
+          //     )
+
+          //     if httpError.code == 401 {
+          //         throw HttpClientError.unauthorized("Incorrect authorization key or no authentication key at all")
+          //     }
+          //     throw error
+          // }
     }
 
     public func getSheetData(_ range: String) throws -> SheetData {
