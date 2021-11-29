@@ -147,6 +147,7 @@ public extension GoogleApiSessionWrapper {
         let sem = DispatchSemaphore(value: 0)
 
         var responseData : Data?
+        var httpError: HttpError
 
         try connection.performRequest(
             method: "POST",
@@ -161,24 +162,16 @@ public extension GoogleApiSessionWrapper {
 
           _ = sem.wait(timeout: DispatchTime.distantFuture)
 
-          return responseData
+          do {
+              httpError = try JSONDecoder().decode(
+                  HttpError.self,
+                  from: responseData!
+              )
+          } catch {
+              return responseData 
+          }
 
-          // do {
-          //     return try JSONDecoder().decode(
-          //         SheetData.self,
-          //         from: responseData!
-          //     )
-    // } catch {
-          //     let httpError = try JSONDecoder().decode(
-          //         HttpError.self,
-          //         from: responseData!
-          //     )
-
-          //     if httpError.code == 401 {
-          //         throw HttpClientError.unauthorized("Incorrect authorization key or no authentication key at all")
-          //     }
-          //     throw error
-          // }
+          throw httpError
     }
 
     public func getSheetData(_ range: String) throws -> SheetData {

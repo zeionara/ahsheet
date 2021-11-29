@@ -4,7 +4,7 @@ private struct ErrorProperties: Codable {
     let status: String
 }
 
-public struct HttpError: Codable {
+public struct HttpError: Codable, Error {
 
     let code: Int
     let message: String
@@ -23,3 +23,4 @@ public struct HttpError: Codable {
         status = properties.status
     }
 }
+
