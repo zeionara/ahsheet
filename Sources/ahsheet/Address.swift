@@ -80,4 +80,13 @@ public struct Address: CustomStringConvertible {
     public var description: String {
         asString
     }
+
+    public var sendable: String {
+        if let unwrappedSheet = sheet {
+            return "'\(unwrappedSheet)'!\(asString)"
+        } else {
+            return asString
+        }
+    }
 }
+
