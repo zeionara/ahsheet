@@ -139,7 +139,7 @@ public extension GoogleApiSessionWrapper {
         }
     }
 
-    func batchUpdate(_ requests: Data) throws -> Data? {
+    private func runBatchUpdate(_ requests: Data) throws -> Data? {
         guard let spreadsheet_id = ProcessInfo.processInfo.environment["AH_SHEET_ID"] else {
             throw HttpClientError.noSpreadsheetId("Target spreadsheet id is undefined (environment variable 'AH_SHEET_ID' is not set)")
         }
@@ -153,7 +153,7 @@ public extension GoogleApiSessionWrapper {
             method: "POST",
             urlString: "https://content-sheets.googleapis.com/v4/spreadsheets/\(spreadsheet_id):batchUpdate?alt=json",
             parameters: [:],
-            body: JSONEncoder().encode(["requests": requests])
+            body: requests
             ) { (data, response, error) in
                // print(String(decoding: data!, as: UTF8.self))
                responseData = data
@@ -171,11 +171,14 @@ public extension GoogleApiSessionWrapper {
               return responseData 
           }
 
+          if httpError.code == 401 {
+              throw HttpClientError.unauthorized("Incorrect authorization key or no authentication key at all")
+          }
           throw httpError
     }
 
-    func batchUpdate(_ requests: [[String: [String: [String: String]]]]) throws -> Data? {
-        return try batchUpdate(JSONEncoder().encode(["requests": requests]))
+    private func runBatchUpdate(_ requests: [[String: [String: [String: String]]]]) throws -> Data? {
+        return try runBatchUpdate(JSONEncoder().encode(["requests": requests]))
     }
 
     func getSheetData(_ range: String) throws -> SheetData {
@@ -195,4 +198,16 @@ public extension GoogleApiSessionWrapper {
             return try pushSheetData(data)
         }
     }
+
+    func batchUpdate(_ data: Data) throws -> Data? {
+        do {
+            print("Running batchUpdate...")
+            return try runBatchUpdate(data)
+        } catch HttpClientError.unauthorized {
+            print("Batch update failed")
+            try refreshToken(connection.provider as! BrowserTokenProvider)
+            return try runBatchUpdate(data)
+        }
+    }
 }
+
