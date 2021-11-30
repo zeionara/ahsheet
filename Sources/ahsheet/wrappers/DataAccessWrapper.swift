@@ -201,10 +201,8 @@ public extension GoogleApiSessionWrapper {
 
     func batchUpdate(_ data: Data) throws -> Data? {
         do {
-            print("Running batchUpdate...")
             return try runBatchUpdate(data)
         } catch HttpClientError.unauthorized {
-            print("Batch update failed")
             try refreshToken(connection.provider as! BrowserTokenProvider)
             return try runBatchUpdate(data)
         }
