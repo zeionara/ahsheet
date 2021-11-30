@@ -139,7 +139,7 @@ public extension GoogleApiSessionWrapper {
         }
     }
 
-    func batchUpdate(_ requests: [[String: [String: [String: String]]]]) throws -> Data? {
+    func batchUpdate(_ requests: Data) throws -> Data? {
         guard let spreadsheet_id = ProcessInfo.processInfo.environment["AH_SHEET_ID"] else {
             throw HttpClientError.noSpreadsheetId("Target spreadsheet id is undefined (environment variable 'AH_SHEET_ID' is not set)")
         }
@@ -174,7 +174,11 @@ public extension GoogleApiSessionWrapper {
           throw httpError
     }
 
-    public func getSheetData(_ range: String) throws -> SheetData {
+    func batchUpdate(_ requests: [[String: [String: [String: String]]]]) throws -> Data? {
+        return try batchUpdate(JSONEncoder().encode(["requests": requests]))
+    }
+
+    func getSheetData(_ range: String) throws -> SheetData {
         do {
             return try fetchSheetData(range)
         } catch HttpClientError.unauthorized {
@@ -183,7 +187,7 @@ public extension GoogleApiSessionWrapper {
         }
     }
 
-    public func setSheetData(_ data: SheetData) throws {
+    func setSheetData(_ data: SheetData) throws {
         do {
             return try pushSheetData(data)
         } catch HttpClientError.unauthorized {
