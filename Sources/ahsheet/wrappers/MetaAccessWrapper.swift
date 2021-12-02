@@ -75,7 +75,7 @@ public extension GoogleApiSessionWrapper {
         }
     }
 
-    public func getSpreadsheetMeta() throws -> SpreadsheetMeta {
+    func getSpreadsheetMeta() throws -> SpreadsheetMeta {
         do {
             return try fetchSpreadsheetMeta()
         } catch HttpClientError.unauthorized {

@@ -11,8 +11,8 @@ private struct Properties: Codable {
 
 public struct SheetMeta: Codable, CustomStringConvertible {
 
-    let id: Int
-    let title: String
+    public let id: Int
+    public let title: String
 
     enum IntermediateCodingKeys: String, CodingKey {
         case properties
