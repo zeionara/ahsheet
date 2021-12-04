@@ -75,11 +75,11 @@ public extension GoogleApiSessionWrapper {
         }
     }
 
-    func getSpreadsheetMeta() throws -> SpreadsheetMeta {
+    func getSpreadsheetMeta(callback: BrowserTokenProvider.SignInCallback? = nil) throws -> SpreadsheetMeta {
         do {
             return try fetchSpreadsheetMeta()
         } catch HttpClientError.unauthorized {
-            try refreshToken(connection.provider as! BrowserTokenProvider)
+            try refreshToken(connection.provider as! BrowserTokenProvider, callback: callback)
             return try fetchSpreadsheetMeta()
         }
     }

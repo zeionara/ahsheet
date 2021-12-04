@@ -2,11 +2,11 @@ import Foundation
 import FoundationNetworking
 import OAuth2
 
-extension Data: CustomStringConvertible {
-    var description: String {
-        String(decoding: self, as: UTF8.self)
-    }
-}
+// extension Data: CustomStringConvertible {
+//     var description: String {
+//         String(decoding: self, as: UTF8.self)
+//     }
+// }
 
 public func putData(_ body: Data?, _ makePath: (String, String) -> String) throws -> Data? {
     if let api_key = ProcessInfo.processInfo.environment["AH_SHEET_WRITE_API_KEY"],
@@ -56,7 +56,7 @@ public func getSheetData(_ range: Range) throws -> SheetData {
 }
 
 public func setSheetData(_ data: SheetData) throws {
-    try putData(
+    _ = try putData(
         try? JSONEncoder().encode(data)
     ) { spreadsheet_id, api_key in
         "https://content-sheets.googleapis.com/v4/spreadsheets/\(spreadsheet_id)/values/\(data.range)?valueInputOption=USER_ENTERED&alt=json&key=\(api_key)"
@@ -181,29 +181,29 @@ public extension GoogleApiSessionWrapper {
         return try runBatchUpdate(JSONEncoder().encode(["requests": requests]))
     }
 
-    func getSheetData(_ range: String) throws -> SheetData {
+    func getSheetData(_ range: String, callback: BrowserTokenProvider.SignInCallback? = nil) throws -> SheetData {
         do {
             return try fetchSheetData(range)
         } catch HttpClientError.unauthorized {
-            try refreshToken(connection.provider as! BrowserTokenProvider)
+            try refreshToken(connection.provider as! BrowserTokenProvider, callback: callback)
             return try fetchSheetData(range)
         }
     }
 
-    func setSheetData(_ data: SheetData) throws {
+    func setSheetData(_ data: SheetData, callback: BrowserTokenProvider.SignInCallback? = nil) throws {
         do {
             return try pushSheetData(data)
         } catch HttpClientError.unauthorized {
-            try refreshToken(connection.provider as! BrowserTokenProvider)
+            try refreshToken(connection.provider as! BrowserTokenProvider, callback: callback)
             return try pushSheetData(data)
         }
     }
 
-    func batchUpdate(_ data: Data) throws -> Data? {
+    func batchUpdate(_ data: Data, callback: BrowserTokenProvider.SignInCallback? = nil) throws -> Data? {
         do {
             return try runBatchUpdate(data)
         } catch HttpClientError.unauthorized {
-            try refreshToken(connection.provider as! BrowserTokenProvider)
+            try refreshToken(connection.provider as! BrowserTokenProvider, callback: callback)
             return try runBatchUpdate(data)
         }
     }
