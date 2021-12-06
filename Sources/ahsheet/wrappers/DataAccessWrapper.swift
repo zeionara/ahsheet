@@ -185,7 +185,7 @@ public extension GoogleApiSessionWrapper {
         do {
             return try fetchSheetData(range)
         } catch HttpClientError.unauthorized {
-            try refreshToken(connection.provider as! BrowserTokenProvider, callback: callback)
+            try refreshToken(callback: callback)
             return try fetchSheetData(range)
         }
     }
@@ -194,7 +194,7 @@ public extension GoogleApiSessionWrapper {
         do {
             return try pushSheetData(data)
         } catch HttpClientError.unauthorized {
-            try refreshToken(connection.provider as! BrowserTokenProvider, callback: callback)
+            try refreshToken(callback: callback)
             return try pushSheetData(data)
         }
     }
@@ -203,7 +203,7 @@ public extension GoogleApiSessionWrapper {
         do {
             return try runBatchUpdate(data)
         } catch HttpClientError.unauthorized {
-            try refreshToken(connection.provider as! BrowserTokenProvider, callback: callback)
+            try refreshToken(callback: callback)
             return try runBatchUpdate(data)
         }
     }

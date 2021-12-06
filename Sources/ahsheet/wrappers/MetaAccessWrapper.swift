@@ -79,7 +79,7 @@ public extension GoogleApiSessionWrapper {
         do {
             return try fetchSpreadsheetMeta()
         } catch HttpClientError.unauthorized {
-            try refreshToken(connection.provider as! BrowserTokenProvider, callback: callback)
+            try refreshToken(callback: callback)
             return try fetchSpreadsheetMeta()
         }
     }

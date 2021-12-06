@@ -16,6 +16,10 @@ public enum TokenSource {
     case browser, refresh
 }
 
+public enum TokenProviderError: Error {
+    case unsupportedTokenProvider    
+}
+
 public class GoogleApiSessionWrapper {
     let connection: Connection
     
@@ -29,6 +33,30 @@ public class GoogleApiSessionWrapper {
         )
         try ensureParentDirectoriesExist(TOKEN_CACHE_PATH)
         try tokenProvider.saveToken(TOKEN_CACHE_PATH)
+
+        // Any subsequent token refreshing will be redirected to the refresh token provider
+
+        connection.provider = GoogleRefreshTokenProvider(
+            credentials: TOKEN_CACHE_PATH
+        )!
+
+        print("Switched token provider from browser to refresh")
+    }
+
+    public func refreshToken(_ tokenProvider: GoogleRefreshTokenProvider) throws {
+        try tokenProvider.signIn()
+        try ensureParentDirectoriesExist(TOKEN_CACHE_PATH)
+        try tokenProvider.saveToken(TOKEN_CACHE_PATH)
+    }
+
+    public func refreshToken(callback: BrowserTokenProvider.SignInCallback? = nil) throws {
+        if let tokenProvider = connection.provider as? BrowserTokenProvider {
+            try refreshToken(tokenProvider, callback: callback)
+        } else if let tokenProvider = connection.provider as? GoogleRefreshTokenProvider {
+            try refreshToken(tokenProvider)
+        } else {
+            throw TokenProviderError.unsupportedTokenProvider
+        }
     }
 
     // public init(callback: BrowserTokenProvider.SignInCallback? = nil, tokenSource: TokenSource = .browser) throws {
@@ -89,7 +117,8 @@ public class GoogleApiSessionWrapper {
             self.connection = Connection(provider: tokenProvider!)
 
             if tokenProvider!.token == nil { // If token wasn't cached earlier or it doesn't longer work
-                throw AuthError.missingToken("Token provider did not provide a token")
+                try refreshToken(tokenProvider!) 
+                // throw AuthError.missingToken("Token provider did not provide a token")
             }
         } else {
             var tokenProvider: BrowserTokenProvider? = nil
@@ -114,3 +143,4 @@ public class GoogleApiSessionWrapper {
         }
     }
 }
+
