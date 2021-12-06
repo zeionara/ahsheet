@@ -30,3 +30,8 @@ func ensureParentDirectoriesExist(_ path: String) throws {
     let parentDirectoryURL = URL(fileURLWithPath: path).deletingLastPathComponent()
     try FileManager.default.createDirectory(atPath: parentDirectoryURL.path, withIntermediateDirectories: true, attributes: nil)
 }
+
+func doesFileExist(_ path: String) -> Bool {
+    FileManager.default.fileExists(atPath: URL(fileURLWithPath: path).path)
+}
+

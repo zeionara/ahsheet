@@ -54,6 +54,9 @@ final class ahsheetTests: XCTestCase {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
+        print(try! GoogleApiSessionWrapper().getSpreadsheetMeta())
+        // print(try! GoogleApiSessionWrapper(tokenSource: .refresh).getSpreadsheetMeta())
+
         XCTAssertEqual(ahsheet().text, "Hello, World!")
     }
 }
